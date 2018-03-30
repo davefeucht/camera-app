@@ -1,7 +1,22 @@
 #take-picture {
-  display: none;
+  /* display: none will not work, because the input value (image) 
+     will not be sent for instance if the form is submitted.
+     So, we set height and width to be basically invisible, set 
+     overflow to hidden and set opacity to 0 */
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+
+  /* Setting z-index to -1 so it will go behind other elements */
+  z-index: -1;
 }
 
 #take-picture + label {
-  
+  font-size: 1.25em;
+  font-weight: 700;
+  display: inline-block; 
+  cursor: pointer;
+  border: 1px solid black;
 }
