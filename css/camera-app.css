@@ -1,3 +1,7 @@
+body {
+  width: 100%;
+}
+
 .page-header {
   font-size: 2em;
   font-weight: bold;
@@ -10,11 +14,13 @@
 }
 
 .image-div {
+  width: 100%;
   text-align: center;
 }
 
 .scaled-image {
-  width: 50%;
+  width: 90%;
+  margin: auto;
 }
 
 #take-picture {
