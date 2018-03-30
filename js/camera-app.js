@@ -4,10 +4,11 @@ $(document).ready(function() {
     let reader = new FileReader();
     reader.onload = function(event) {
       if($(".scaled-image").length > 0) {
-        image.src = event.target.result;
+        $(".scaled-image").attr("src", event.target.result);
       }
-      else  {
+      else {
         let image = document.createElement("img");
+        image.src = event.target.result;
         $(".image-div").append(image);
         $(".image-div img").addClass("scaled-image");
       }
