@@ -6,6 +6,7 @@ $(document).ready(function() {
       let image = document.createElement("img");
       image.src = event.target.result;
       $(".image-div").append(image);
+      $(".image-div img").addClass('scaled-image');
     };
     reader.readAsDataURL(data);
   });

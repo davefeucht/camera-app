@@ -1,9 +1,5 @@
-body {
-  width: 100%;
-}
-
 .page-header {
-  font-size: 3em;
+  font-size: 2em;
   font-weight: bold;
   border-bottom: 1px solid black;
   margin-bottom: 5px;
@@ -11,6 +7,10 @@ body {
 
 .form-body {
   text-align: center;
+}
+
+.scaled-image {
+  width: 50%;
 }
 
 #take-picture {
