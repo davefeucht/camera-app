@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Snap!</title>
+  <title>Aw, snap!</title>
   <link rel="stylesheet" type="text/css" href="css/camera-app.css">
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
   <script type="text/javascript" src="js/camera-app.js"></script>
 </head>
 <body>
   <div class="page-header">
-    <span>Snap!</span>
+    <span>Aw, snap!</span>
   </div>
   <form action="#" id="take-picture-form">
-    <input type="file" id="take-picture" accept="image/*" capture="user">
-    <label for="take-picture"><img src="img/camera.png" width="50" border="0" alt="Take Photo" /></label>
+    <div class="form-body">
+      <input type="file" id="take-picture" accept="image/*" capture="user">
+      <label for="take-picture"><img src="img/camera.png" width="50" border="0" alt="Take Photo" /></label>
+    </div>
   </form>
   <div class="image-div">
   

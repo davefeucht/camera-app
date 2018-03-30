@@ -1,8 +1,20 @@
+.page-header {
+  font-size: 3em;
+  font-weight: bold;
+  border-bottom: 1px solid black;
+  margin-bottom: 5px;
+}
+
+.form-body {
+  text-align: center;
+}
+
 #take-picture {
   /* display: none will not work, because the input value (image) 
      will not be sent for instance if the form is submitted.
      So, we set height and width to be basically invisible, set 
-     overflow to hidden and set opacity to 0 */
+     overflow to hidden and set opacity to 0 
+  */
   width: 0.1px;
   height: 0.1px;
   opacity: 0;
