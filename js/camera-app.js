@@ -3,10 +3,14 @@ $(document).ready(function() {
     let data = e.originalEvent.target.files[0];
     let reader = new FileReader();
     reader.onload = function(event) {
-      let image = document.createElement("img");
-      image.src = event.target.result;
-      $(".image-div").append(image);
-      $(".image-div img").addClass('scaled-image');
+      if($(".scaled-image").length > 0) {
+        image.src = event.target.result;
+      }
+      else  {
+        let image = document.createElement("img");
+        $(".image-div").append(image);
+        $(".image-div img").addClass("scaled-image");
+      }
     };
     reader.readAsDataURL(data);
   });
