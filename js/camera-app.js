@@ -9,30 +9,51 @@ function draw(context, positions) {
 }
 
 function findxy(eventType, positions, canvas, draw_flag, e) {
+  e.preventDefault();
   let context = canvas.getContext("2d");
   let dot_flag = false;
   if (eventType === "touchstart" || eventType === "mousedown") {
-    positions.prevX = positions.currX;
-    positions.prevY = positions.currY;
-    positions.currX = e.clientX - canvas.offsetLeft;
-    positions.currY = e.clientY - canvas.offsetTop;
   
     dot_flag = true;
     if (dot_flag) {
-      context.beginPath();
-      context.fillStyle = "black";
-      context.fillRect(positions.currX, positions.currY, 2, 2);
-      context.closePath();
-      dot_flag = false;
+      if(eventType === "touchstart") {
+        let touches = e.changedTouches;
+        context.beginPath();
+        context.fillStyle = "black";
+        context.fillRect(touches[0].pageX, touches[0].pageY, 2, 2); 
+        context.closePath();
+        dot_flag = false;
+      }
+      else {
+        positions.prevX = positions.currX;
+        positions.prevY = positions.currY;
+        positions.currX = e.clientX - canvas.offsetLeft;
+        positions.currY = e.clientY - canvas.offsetTop;
+        context.beginPath();
+        context.fillStyle = "black";
+        context.fillRect(positions.currX, positions.currY, 2, 2);
+        context.closePath();
+        dot_flag = false;
+      }
     }
   }
   if (eventType === "touchmove" || eventType === "mousemove") {
     if (draw_flag) {
-      positions.prevX = positions.currX;
-      positions.prevY = positions.currY;
-      positions.currX = e.clientX - canvas.offsetLeft;
-      positions.currY = e.clientY - canvas.offsetTop;
-      draw(context, positions);
+      if(eventType === "touchmove") {
+        let touches = e.changedTouches;
+        positions.prevX = positions.currX;
+        positions.prevY = positions.currY;
+        positions.currX = touches[0].pageX - canvas.offsetLeft;
+        positions.currY = touches[0].pageY - canvas.offsetTop; 
+        draw(context, positions);
+      }
+      else {
+        positions.prevX = positions.currX;
+        positions.prevY = positions.currY;
+        positions.currX = e.clientX - canvas.offsetLeft;
+        positions.currY = e.clientY - canvas.offsetTop;
+        draw(context, positions);
+      }
     }
   }
 }
@@ -79,24 +100,30 @@ $(document).ready(function() {
   let clicked = false;
 
   $("#image-canvas").on("touchstart", function(e) {
+    console.log(e);
     clicked = true;
     findxy("touchstart", positions, canvas, clicked, e);
   });
+
   $("#image-canvas").on("mousedown", function(e) {
     clicked = true;
     findxy("mousedown", positions, canvas, clicked, e);
   });
+
   $("#image-canvas").on("touchend", function(e) {
     clicked = false;
     findxy("touchend", positions, canvas, clicked, e);
   });
+
   $("#image-canvas").on("mouseup", function(e) {
     clicked = false;
     findxy("mouseup", positions, canvas, clicked, e);
   });
+
   $("#image-canvas").on("touchmove", function(e) {
     findxy("touchmove", positions, canvas, clicked, e);
   });
+
   $("#image-canvas").on("mousemove", function(e) {
     findxy("mousemove", positions, canvas, clicked, e);
   });
