@@ -12,12 +12,17 @@ function findxy(eventType, positions, canvas, draw_flag, e) {
   e.preventDefault();
   let context = canvas.getContext("2d");
   let dot_flag = false;
+
   if (eventType === "touchstart" || eventType === "mousedown") {
   
     dot_flag = true;
     if (dot_flag) {
       if(eventType === "touchstart") {
         let touches = e.changedTouches;
+        positions.prevX = touches[0].pageX - canvas.offsetLeft;
+        positions.prevY = touches[0].pageY - canvas.offsetTop;
+        positions.currX = touches[0].pageX - canvas.offsetLeft;
+        positions.currY = touches[0].pageY - canvas.offsetTop; 
         context.beginPath();
         context.fillStyle = "black";
         context.fillRect(touches[0].pageX, touches[0].pageY, 2, 2); 
@@ -99,8 +104,12 @@ $(document).ready(function() {
   let positions = {currX: 0, currY: 0, prevX: 0, prevY: 0};
   let clicked = false;
 
+  $(".save-image").on("click", function(e) {
+    let dataImage = canvas.toDataURL();
+    download(dataImage, "AwSnap.png", "image/png");
+  });
+
   $("#image-canvas").on("touchstart", function(e) {
-    console.log(e);
     clicked = true;
     findxy("touchstart", positions, canvas, clicked, e);
   });
