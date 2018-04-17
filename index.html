@@ -13,7 +13,24 @@
     <span>Aw, snap!</span>
   </div>
   <div class="controls">
-  <button class="save-image">Save</button>
+    <div class="color-select">
+      <select id="color-selection">
+        <option value="red">Red</option>
+        <option value="blue">Blue</option>
+        <option selected value="black">Black</option>
+        <option value="green">Green</option>
+        <option value="yellow">Yellow</option>
+      </select>
+    </div>
+    <div class="line-select">
+      <select id="line-selection">
+        <option value="1">1 px</option>
+        <option selected value="2">2 px</option>
+        <option value="3">3 px</option>
+        <option value="4">4 px</option>
+        <option value="5">5 px</option>
+      </select>
+    </div>
   </div>
   <div class="image-div">
     <canvas id="image-canvas"></canvas>

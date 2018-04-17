@@ -1,16 +1,17 @@
-function draw(context, positions) {
+function draw(context, positions, color, line_size) {
   context.beginPath();
   context.moveTo(positions.prevX, positions.prevY);
   context.lineTo(positions.currX, positions.currY);
-  context.strokeStyle = "black";
-  context.lineWidth = 2;
+  context.strokeStyle = color;
+  context.lineWidth = line_size;
   context.stroke();
   context.closePath();
 }
 
-function findxy(eventType, positions, canvas, draw_flag, e) {
+function findxy(eventType, positions, canvas, settings, e) {
   e.preventDefault();
   let context = canvas.getContext("2d");
+  let draw_flag = settings.clicked;
   let dot_flag = false;
 
   if (eventType === "touchstart" || eventType === "mousedown") {
@@ -24,8 +25,8 @@ function findxy(eventType, positions, canvas, draw_flag, e) {
         positions.currX = touches[0].pageX - canvas.offsetLeft;
         positions.currY = touches[0].pageY - canvas.offsetTop; 
         context.beginPath();
-        context.fillStyle = "black";
-        context.fillRect(touches[0].pageX, touches[0].pageY, 2, 2); 
+        context.fillStyle = settings.color;
+        context.fillRect(touches[0].pageX, touches[0].pageY, settings.line_size, settings.line_size); 
         context.closePath();
         dot_flag = false;
       }
@@ -35,8 +36,8 @@ function findxy(eventType, positions, canvas, draw_flag, e) {
         positions.currX = e.clientX - canvas.offsetLeft;
         positions.currY = e.clientY - canvas.offsetTop;
         context.beginPath();
-        context.fillStyle = "black";
-        context.fillRect(positions.currX, positions.currY, 2, 2);
+        context.fillStyle = settings.color;
+        context.fillRect(positions.currX, positions.currY, settings.line_size, settings.line_size);
         context.closePath();
         dot_flag = false;
       }
@@ -50,14 +51,14 @@ function findxy(eventType, positions, canvas, draw_flag, e) {
         positions.prevY = positions.currY;
         positions.currX = touches[0].pageX - canvas.offsetLeft;
         positions.currY = touches[0].pageY - canvas.offsetTop; 
-        draw(context, positions);
+        draw(context, positions, settings.color, settings.line_size);
       }
       else {
         positions.prevX = positions.currX;
         positions.prevY = positions.currY;
         positions.currX = e.clientX - canvas.offsetLeft;
         positions.currY = e.clientY - canvas.offsetTop;
-        draw(context, positions);
+        draw(context, positions, settings.color, settings.line_size);
       }
     }
   }
@@ -102,39 +103,42 @@ $(document).ready(function() {
   let image = document.createElement("img");
   let canvas = document.getElementById("image-canvas");
   let positions = {currX: 0, currY: 0, prevX: 0, prevY: 0};
-  let clicked = false;
+  let settings = {color: "black", line_size: 2, clicked: false};
 
-  $(".save-image").on("click", function(e) {
-    let dataImage = canvas.toDataURL();
-    download(dataImage, "AwSnap.png", "image/png");
+  $("#color-selection").on("change", function(e) {
+    settings.color = e.target.value;
+  });
+
+  $("#line-selection").on("change", function(e) {
+    settings.line_size = e.target.value;
   });
 
   $("#image-canvas").on("touchstart", function(e) {
-    clicked = true;
-    findxy("touchstart", positions, canvas, clicked, e);
+    settings.clicked = true;
+    findxy("touchstart", positions, canvas, settings, e);
   });
 
   $("#image-canvas").on("mousedown", function(e) {
-    clicked = true;
-    findxy("mousedown", positions, canvas, clicked, e);
+    settings.clicked = true;
+    findxy("mousedown", positions, canvas, settings, e);
   });
 
   $("#image-canvas").on("touchend", function(e) {
-    clicked = false;
-    findxy("touchend", positions, canvas, clicked, e);
+    settings.clicked = false;
+    findxy("touchend", positions, canvas, settings, e);
   });
 
   $("#image-canvas").on("mouseup", function(e) {
-    clicked = false;
-    findxy("mouseup", positions, canvas, clicked, e);
+    settings.clicked = false;
+    findxy("mouseup", positions, canvas, settings, e);
   });
 
   $("#image-canvas").on("touchmove", function(e) {
-    findxy("touchmove", positions, canvas, clicked, e);
+    findxy("touchmove", positions, canvas, settings, e);
   });
 
   $("#image-canvas").on("mousemove", function(e) {
-    findxy("mousemove", positions, canvas, clicked, e);
+    findxy("mousemove", positions, canvas, settings, e);
   });
 
   //Setup an event handler on change of the image input
