@@ -1,4 +1,7 @@
 body {
+  display: grid;
+  grid-template-rows: 15% 5% 60% 20%;
+  grid-template-columns: 100%;
   width: 100%;
 }
 
@@ -7,6 +10,7 @@ canvas {
 }
 
 .page-header {
+  grid-row: row 1;
   font-size: 2em;
   font-weight: bold;
   border-bottom: 1px solid black;
@@ -14,9 +18,12 @@ canvas {
 }
 
 .controls {
+  width: 100%;
+  grid-row: row 2;
   display: grid; 
   grid-template-rows: 5%;
   grid-template-columns: 48% 48%;
+  justify-content: left;
 }
 
 .color-select {
@@ -25,15 +32,20 @@ canvas {
 
 .line-select {
   grid-column-start: 2;
-  text-align: right;
-}
-
-.form-body {
-  text-align: center;
+  justify-self: end;
 }
 
 .image-div {
+  grid-row: row 3;
   width: 100%;
+  text-align: center;
+}
+
+#take-picture-form {
+  grid-row: row 4;
+}
+
+.form-body {
   text-align: center;
 }
 
