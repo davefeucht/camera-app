@@ -1,14 +1,22 @@
-function draw(context, positions, color, line_size) {
-  context.beginPath();
-  context.moveTo(positions.prevX, positions.prevY);
-  context.lineTo(positions.currX, positions.currY);
-  context.strokeStyle = color;
-  context.lineWidth = line_size;
-  context.stroke();
-  context.closePath();
+function draw(eventType, context, positions, color, line_size) {
+  if(eventType === "touchmove" || eventType === "mousemove") {
+    context.beginPath();
+    context.moveTo(positions.prevX, positions.prevY);
+    context.lineTo(positions.currX, positions.currY);
+    context.strokeStyle = color;
+    context.lineWidth = line_size;
+    context.stroke();
+    context.closePath();
+  }
+  else {
+    context.beginPath();
+    context.fillStyle = color;
+    context.fillRect(positions.currX, positions.currY, line_size, line_size); 
+    context.closePath();
+  }
 }
 
-function findxy(eventType, positions, canvas, settings, e) {
+function handleEvents(eventType, positions, canvas, settings, e) {
   e.preventDefault();
   let context = canvas.getContext("2d");
   let draw_flag = settings.clicked;
@@ -24,10 +32,7 @@ function findxy(eventType, positions, canvas, settings, e) {
         positions.prevY = touches[0].pageY - canvas.offsetTop;
         positions.currX = touches[0].pageX - canvas.offsetLeft;
         positions.currY = touches[0].pageY - canvas.offsetTop; 
-        context.beginPath();
-        context.fillStyle = settings.color;
-        context.fillRect(touches[0].pageX, touches[0].pageY, settings.line_size, settings.line_size); 
-        context.closePath();
+        draw(eventType, context, positions, settings.color, settings.line_size);
         dot_flag = false;
       }
       else {
@@ -35,10 +40,7 @@ function findxy(eventType, positions, canvas, settings, e) {
         positions.prevY = positions.currY;
         positions.currX = e.clientX - canvas.offsetLeft;
         positions.currY = e.clientY - canvas.offsetTop;
-        context.beginPath();
-        context.fillStyle = settings.color;
-        context.fillRect(positions.currX, positions.currY, settings.line_size, settings.line_size);
-        context.closePath();
+        draw(eventType, context, positions, settings.color, settings.line_size);
         dot_flag = false;
       }
     }
@@ -51,20 +53,20 @@ function findxy(eventType, positions, canvas, settings, e) {
         positions.prevY = positions.currY;
         positions.currX = touches[0].pageX - canvas.offsetLeft;
         positions.currY = touches[0].pageY - canvas.offsetTop; 
-        draw(context, positions, settings.color, settings.line_size);
+        draw(eventType, context, positions, settings.color, settings.line_size);
       }
       else {
         positions.prevX = positions.currX;
         positions.prevY = positions.currY;
         positions.currX = e.clientX - canvas.offsetLeft;
         positions.currY = e.clientY - canvas.offsetTop;
-        draw(context, positions, settings.color, settings.line_size);
+        draw(eventType, context, positions, settings.color, settings.line_size);
       }
     }
   }
 }
 
-function drawRotated(image, degrees) {
+function drawRotatedImage(image, degrees) {
     let canvas = document.getElementById("image-canvas");
     let context = canvas.getContext("2d");
 
@@ -115,30 +117,30 @@ $(document).ready(function() {
 
   $("#image-canvas").on("touchstart", function(e) {
     settings.clicked = true;
-    findxy("touchstart", positions, canvas, settings, e);
+    handleEvents("touchstart", positions, canvas, settings, e);
   });
 
   $("#image-canvas").on("mousedown", function(e) {
     settings.clicked = true;
-    findxy("mousedown", positions, canvas, settings, e);
+    handleEvents("mousedown", positions, canvas, settings, e);
   });
 
   $("#image-canvas").on("touchend", function(e) {
     settings.clicked = false;
-    findxy("touchend", positions, canvas, settings, e);
+    handleEvents("touchend", positions, canvas, settings, e);
   });
 
   $("#image-canvas").on("mouseup", function(e) {
     settings.clicked = false;
-    findxy("mouseup", positions, canvas, settings, e);
+    handleEvents("mouseup", positions, canvas, settings, e);
   });
 
   $("#image-canvas").on("touchmove", function(e) {
-    findxy("touchmove", positions, canvas, settings, e);
+    handleEvents("touchmove", positions, canvas, settings, e);
   });
 
   $("#image-canvas").on("mousemove", function(e) {
-    findxy("mousemove", positions, canvas, settings, e);
+    handleEvents("mousemove", positions, canvas, settings, e);
   });
 
   //Setup an event handler on change of the image input
@@ -157,7 +159,7 @@ $(document).ready(function() {
       image.onload = function() {
         //context.drawImage(image, 0, 0, canvas.width, canvas.height);
         $("#image-canvas").css("display", "inline");
-        drawRotated(image, 90);
+        drawRotatedImage(image, 90);
       };
     };
     reader.readAsDataURL(data);
